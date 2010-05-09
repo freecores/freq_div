@@ -1,13 +1,14 @@
 
 `include "defines.v"
 
-module even(clk, out, P, reset, not_zero);
+module even(clk, out, P, reset, not_zero, enable);
 
 	input clk;
 	output out;
 	input [`SIZE-1:0] P;
 	input reset;
 	input not_zero;
+	input enable;
 
 	reg [`SIZE-1:0] counter;
 	reg out_counter;
@@ -24,7 +25,7 @@ module even(clk, out, P, reset, not_zero);
 			counter <= 1;
 			out_counter <= 1;
 		end
-		else
+		else if(enable)
 		begin
 			if(counter == 1)
 			begin

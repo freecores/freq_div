@@ -1,12 +1,13 @@
 
 `include "defines.v"
 
-module odd(clk, out, P, reset);
+module odd(clk, out, P, reset, enable);
 
 	input clk;	// slow clock
 	output out;
 	input [`SIZE-1:0] P;
 	input reset;
+	input enable;
 
 	reg [`SIZE-1:0] counter;
 	reg [`SIZE-1:0] counter2;
@@ -25,7 +26,7 @@ module odd(clk, out, P, reset);
 			counter <= P;
 			out_counter <= 1;
 		end
-		else
+		else if (enable)
 		begin
 			if(counter == 1)
 			begin
@@ -51,7 +52,7 @@ module odd(clk, out, P, reset);
 			initial_begin <= interm_3[`SIZE:1];
 			out_counter2 <= 1;
 		end
-		else if(initial_begin <= 1)
+		else if(initial_begin <= 1 && enable)
 		begin
 			if(counter2 == 1)
 			begin
@@ -63,7 +64,7 @@ module odd(clk, out, P, reset);
 				counter2 <= counter2-1;
 			end
 		end
-		else
+		else if(enable)
 		begin
 			initial_begin <= initial_begin - 1;
 		end
@@ -75,7 +76,7 @@ module odd(clk, out, P, reset);
 		begin
 			rst_pulse <= 0;
 		end
-		else
+		else if(enable)
 		begin
 			if(P != old_P)
 			begin
@@ -88,6 +89,5 @@ module odd(clk, out, P, reset);
 			old_P <= P;
 		end
 	end
-
 
 endmodule //odd
