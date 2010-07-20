@@ -1,27 +1,29 @@
 
 `include "defines.v"
 
-module divider(in, out, P, reset);
+module divider(in, out, N, reset);
 
-	input in;
-	input [`SIZE-1:0] P;
-	input reset;
-	output out;
+	input in;				// input clock
+	input [`SIZE-1:0] N;	// the number to be divided by
+	input reset;			// asynchronous reset
+	output out;				// divided output clock
 	
-	wire out_odd;
-	wire out_even;
-	wire not_zero;
-	wire enable_even;
-	wire enable_odd;
+	wire out_odd;			// output of odd divider
+	wire out_even;			// output of even divider
+	wire not_zero;			// signal to find divide by 0 case
+	wire enable_even;		// enable of even divider
+	wire enable_odd;		// enable of odd divider
 
-	assign not_zero = | P[`SIZE-1:1];
+	assign not_zero = | N[`SIZE-1:1];
 
-	assign out = (out_odd & P[0] & not_zero) | (out_even & !P[0]);
+	assign out = (out_odd & N[0] & not_zero) | (out_even & !N[0]);
 	//assign out = out_odd | out_even;
-	assign enable_odd = P[0] & not_zero;
-	assign enable_even = !P[0];
+	assign enable_odd = N[0] & not_zero;
+	assign enable_even = !N[0];
 
-	even even_0(in, out_even, P, reset, not_zero, enable_even);
-	odd odd_0(in, out_odd, P, reset, enable_odd);
+	// Even divider
+	even even_0(in, out_even, N, reset, not_zero, enable_even);
+	// Odd divider
+	odd odd_0(in, out_odd, N, reset, enable_odd);
 	
 endmodule //divider

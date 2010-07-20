@@ -1,1 +1,1 @@
-`define SIZE 6
+`define SIZE 6 // the size of the divider, N
