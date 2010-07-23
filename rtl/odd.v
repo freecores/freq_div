@@ -36,14 +36,14 @@ module odd(clk, out, N, reset, enable);
 			end
 			else
 			begin
-				counter <= counter-1;
+				counter <= counter - 1'b1;
 			end
 		end
 	end
 
 	reg [`SIZE-1:0] initial_begin;		// this is used to offset the negative edge counter
 	wire [`SIZE:0] interm_3;			// from the positive edge counter in order to
-	assign interm_3 = {1'b0,N} + 3;		// guarante 50% duty cycle.
+	assign interm_3 = {1'b0,N} + 2'b11;		// guarante 50% duty cycle.
 
 	// counter driven by negative edge of clock.
 	always @(negedge clk)
@@ -63,12 +63,12 @@ module odd(clk, out, N, reset, enable);
 			end
 			else
 			begin
-				counter2 <= counter2-1;
+				counter2 <= counter2 - 1'b1;
 			end
 		end
 		else if(enable)
 		begin
-			initial_begin <= initial_begin - 1;
+			initial_begin <= initial_begin - 1'b1;
 		end
 	end
 
@@ -100,6 +100,10 @@ module odd(clk, out, N, reset, enable);
 				rst_pulse <= 0;
 			end
 		end
+	end
+
+	always @(posedge clk)
+	begin
 		old_N <= N;	// always save the old N value to guarante reset from
 	end				// an even-to-odd transition.
 
